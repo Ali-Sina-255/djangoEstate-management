@@ -131,22 +131,25 @@ Analytics & Reporting
 Clone the Repository
 bash
 
-git clone https://github.com/yourusername/djangoEstate-management.git
+https://github.com/Ali-Sina-255/djangoEstate-management
 cd djangoEstate-management
 
 cp .env.example .env
-# Edit .env with your configuration
 
 # Build and start all services
+
 docker-compose up -d --build
 
 # Run migrations
+
 docker-compose exec backend python manage.py migrate
 
 # Create superuser
+
 docker-compose exec backend python manage.py createsuperuser
 
 # Collect static files
+
 docker-compose exec backend python manage.py collectstatic --noinput
 
 Access the Application
@@ -163,37 +166,36 @@ Access the Application
 
     RabbitMQ Management: http://localhost:15672
 
-
-
 🐳 Docker Services
-Service	Port	Description
-PostgreSQL	5432	Primary database
-Redis	6379	Caching & broker
-RabbitMQ	5672, 15672	Message queue
-Django Backend	8000	REST API
-Celery Worker	-	Async tasks
-Celery Beat	-	Scheduled tasks
-Flower	5555	Task monitoring
-Next.js Frontend	3000	Web application
-Nginx	80, 443	Reverse proxy
+Service Port Description
+PostgreSQL 5432 Primary database
+Redis 6379 Caching & broker
+RabbitMQ 5672, 15672 Message queue
+Django Backend 8000 REST API
+Celery Worker - Async tasks
+Celery Beat - Scheduled tasks
+Flower 5555 Task monitoring
+Next.js Frontend 3000 Web application
+Nginx 80, 443 Reverse proxy
 
 cd backend
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate # On Windows: venv\Scripts\activate
 pip install -r requirements/dev.txt
-
 
 🔧 Development Setup (Without Docker)
 
 # Setup database
+
 createdb djangoestate
 
 # Run migrations
+
 python manage.py migrate
 
 # Start development server
-python manage.py runserver
 
+python manage.py runserver
 
 Frontend Setup
 cd frontend
@@ -203,13 +205,17 @@ npm run dev
 Celery Setup
 
 # Terminal 1: Start Redis
+
 redis-server
 
 # Terminal 2: Start Celery Worker
+
 celery -A config worker --loglevel=info
 
 # Terminal 3: Start Celery Beat
+
 celery -A config beat --loglevel=info
 
 # Terminal 4: Start Flower
+
 celery -A config flower --port=5555
