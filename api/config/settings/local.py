@@ -69,28 +69,39 @@ OPT_EXPIRATION = timedelta(minutes=1)
 
 # Database configuration - Override if using PostgreSQL in development
 # Uncomment if you want to use PostgreSQL locally
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": getenv("DB_NAME", "real_estate_dev"),
-#         "USER": getenv("DB_USER", "postgres"),
-#         "PASSWORD": getenv("DB_PASSWORD", ""),
-#         "HOST": getenv("DB_HOST", "localhost"),
-#         "PORT": getenv("DB_PORT", "5432"),
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": getenv("DB_NAME"),
+        "USER": getenv("DB_USER"),
+        "PASSWORD": getenv("DB_PASSWORD"),
+        "HOST": getenv("DB_HOST"),
+        "PORT": getenv("DB_PORT"),
+    }
+}
 
 # Celery settings for development
 CELERY_BROKER_URL = getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
 CELERY_RESULT_BACKEND = getenv("CELERY_RESULT_BACKEND", "redis://localhost:6379/0")
 
-# Logging configuration for development
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {name} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
+            "level": "DEBUG",
+            "formatter": "verbose",
         },
     },
     "root": {
@@ -100,7 +111,17 @@ LOGGING = {
     "loggers": {
         "django": {
             "handlers": ["console"],
-            "level": getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django.db.backends": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "celery": {
+            "handlers": ["console"],
+            "level": "INFO",
             "propagate": False,
         },
     },
